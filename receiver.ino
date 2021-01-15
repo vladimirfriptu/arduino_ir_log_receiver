@@ -20,7 +20,9 @@ void setup(){
 void loop(){
   // IR Extender
   if (irrecv.decode(&results)) {
-//    Serial.println(results.value, HEX);
+    Serial.println("---------------------------------------");
+    Serial.println("");
+    Serial.println(results.value, HEX);
     int codeLen = results.rawlen - 1;
     Serial.println("code length: ");
     Serial.print(codeLen);
@@ -38,32 +40,9 @@ void loop(){
       }
       Serial.print(rawCodes[i - 1], DEC);
     }
-    irsend.sendRaw(power, codeLen, 38);
+//    Раскоментировать если нужно повторять сигнал
+//    irsend.sendRaw(power, codeLen, 38);
     irrecv.enableIRIn();
     irrecv.resume(); // Receive the next value
-//    dump(&results);
   }
-}
-
-// Dump results
-void dump(decode_results *results) {
-  int count = results->rawlen;
-  Serial.print(results->value, HEX);
-  Serial.print(" (");
-  Serial.print(results->bits, DEC);
-  Serial.println(" bits)");
-  Serial.print("Raw (");
-  Serial.print(count, DEC);
-  Serial.print("): ");
-
-  for (int i = 0; i < count; i++) {
-    if ((i % 2) == 1) {
-      Serial.print(results->rawbuf[i]*USECPERTICK, DEC);
-    } 
-    else {
-      Serial.print(-(int)results->rawbuf[i]*USECPERTICK, DEC);
-    }
-    Serial.print(" ");
-  }
-  Serial.println("");
 }
